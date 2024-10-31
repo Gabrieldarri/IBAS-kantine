@@ -35,11 +35,14 @@ th, td {
     border: 1px solid #ddd;
 }
 
-th {
+thead {
     background-color: aqua;
     color: #fff;
 }
 
 tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+tr:hover {
+    background-color: #f1f7ff;
 }
