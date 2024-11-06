@@ -34,9 +34,9 @@
                 @foreach (var item in menuItems)
                 {
                     <tr>
-                        <td>@item["Dag"]</td> 
-                        <td>@item["VarmRet"]</td> 
-                        <td>@item["KoldRet"]</td> 
+                        <td>@item.RowKey </td> 
+                        <td>@item.GetString("Varm_Ret")</td> 
+                        <td>@item.GetString("Kold_Ret")</td> 
                     </tr>
                 }
             </tbody>
