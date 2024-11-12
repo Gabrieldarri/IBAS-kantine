@@ -1,19 +1,23 @@
 ﻿@page
-@using Azure.Data.Tables;
-@using Azure;
+@using Azure.Data.Tables
+@using Azure.Identity
+@inject IConfiguration Configuration
 
-@model IndexModel
 @{
     ViewData["Title"] = "Home page";
 
-    var tablename = "IBASKantineMenu";
-    var connectionString = "DefaultEndpointsProtocol=https;AccountName=ibasbikeproduction131213;AccountKey=h8F2fwTr7NXt8ThM15XuIp2vtuxgiQBQMOsr1yJj1b2pK5ypNTe90AgtWrBNbgrCFwvR9XylQqhD+ASt0su9rA==;EndpointSuffix=core.windows.net";
+    var tableName = "IBASKantineMenu";
+    var accountName = "ibasbikeproduction131213";
 
-    TableClient tableClient = new TableClient(connectionString, tablename);
-    Pageable<TableEntity> entities = tableClient.Query<TableEntity>();
+    // Brug DefaultAzureCredential til Managed Identity
+    var tableClient = new TableClient(
+        new Uri($"https://{accountName}.table.core.windows.net"),
+        tableName,
+        new DefaultAzureCredential()
+    );
 
-    
-    var menuItems = entities.ToList(); 
+    // Hent dataene fra tabellen
+    var menuItems = tableClient.Query<TableEntity>().ToList();
 }
 
 <div class="container my-5">
@@ -34,9 +38,9 @@
                 @foreach (var item in menuItems)
                 {
                     <tr>
-                        <td>@item.RowKey </td> 
-                        <td>@item.GetString("Varm_Ret")</td> 
-                        <td>@item.GetString("Kold_Ret")</td> 
+                        <td>@item.GetString("Dag")</td>
+                        <td>@item.GetString("Varm_Ret")</td>
+                        <td>@item.GetString("Kold_Ret")</td>
                     </tr>
                 }
             </tbody>
